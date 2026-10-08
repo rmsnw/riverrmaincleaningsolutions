@@ -12,7 +12,7 @@
         var id = a.getAttribute('href');
         if (id.length < 2) return;
         var target = document.querySelector(id);
-        if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -90 }); }
+        if (target) { e.preventDefault(); lenis.start(); lenis.scrollTo(target, { offset: -90 }); }
       });
     });
   }
@@ -33,6 +33,16 @@
     if (lenis) { open ? lenis.stop() : lenis.start(); }
   }
   burger.addEventListener('click', function () { setMenu(!nav.classList.contains('open')); });
+  var navClose = document.getElementById('navClose');
+  if (navClose) navClose.addEventListener('click', function () { setMenu(false); burger.focus(); });
+  // close the menu after choosing a normal link
+  nav.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      if (!a.parentElement.classList.contains('has-dropdown')) setMenu(false);
+    });
+  });
+  // reset if the window grows to desktop width
+  window.addEventListener('resize', function () { if (window.innerWidth > 960) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
   document.addEventListener('click', function (e) {
     if (nav.classList.contains('open') && !nav.contains(e.target) && !burger.contains(e.target)) setMenu(false);
