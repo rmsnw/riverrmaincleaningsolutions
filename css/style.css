@@ -290,11 +290,13 @@ em { font-style: normal; color: var(--gold); position: relative; }
 
 @media (max-width: 960px) {
   :root { --nav-h: 80px; }
+  /* backdrop-filter would trap the fixed menu inside the header */
+  .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
   .topbar-note { display: none; }
   .topbar-inner { justify-content: flex-start; }
   .burger { display: block; z-index: 210; }
-  .nav { position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 88vw); z-index: 200; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 24px; padding: 90px 24px 30px; background: #fff; box-shadow: -20px 0 50px rgba(14,26,66,.25); transform: translateX(105%); transition: transform .35s ease; overflow-y: auto; }
-  .nav.open { transform: none; }
+  .nav { position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 88vw); z-index: 200; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 24px; padding: 90px 24px 30px; background: #fff; box-shadow: none; visibility: hidden; transform: translateX(105%); transition: transform .35s ease, visibility .35s, box-shadow .35s; overflow-y: auto; }
+  .nav.open { transform: none; visibility: visible; box-shadow: -20px 0 50px rgba(14,26,66,.25); }
   .nav-list { flex-direction: column; align-items: stretch; gap: 0; }
   .nav-list > li > a { padding: 15px 4px; border-radius: 0; border-bottom: 1px solid #e8ebf5; justify-content: space-between; }
   .nav-list > li > a.active { background: transparent; color: var(--gold-dark); }
@@ -303,7 +305,7 @@ em { font-style: normal; color: var(--gold); position: relative; }
   .has-dropdown.open .dropdown { display: block; }
   .has-dropdown.open .chev { transform: rotate(180deg); }
   .nav-cta { width: 100%; }
-  body.menu-open::after { content: ''; position: fixed; inset: 0; z-index: 150; background: rgba(14,26,66,.55); }
+  body.menu-open::after { content: ''; position: fixed; inset: 0; z-index: 90; background: rgba(14,26,66,.55); }
 
   .section { padding: 80px 0; }
   .about-grid, .why-grid, .faq-grid, .quote { grid-template-columns: 1fr; }
@@ -329,6 +331,13 @@ em { font-style: normal; color: var(--gold); position: relative; }
   .seal { width: 98px; height: 98px; left: -10px; bottom: 70px; }
   
   .mini-features, .field-row { grid-template-columns: 1fr; }
+  .why-media { padding: 0 24px 60px 0; }
+  .why-media::before { left: 0; right: 14px; }
+  .why-cover { left: 10px; top: 20px; padding: 14px 16px; }
+  .why-cover li { font-size: .86rem; }
+  .why-list li { grid-template-columns: 50px 1fr; gap: 14px; padding: 18px 8px; }
+  .why-no { display: none; }
+  .why-actions .btn { flex: 1 1 100%; }
   .bento { grid-template-columns: 1fr; }
   .tile-a, .tile-b, .tile-c, .tile-d { min-height: 360px; }
   .steps { grid-template-columns: 1fr; }
