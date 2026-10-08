@@ -150,7 +150,7 @@ em { font-style: normal; color: var(--gold); position: relative; }
 .about-media { position: relative; padding: 0 60px 70px 0; }
 .photo { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 22px; background: var(--sand); box-shadow: 0 26px 56px rgba(14,26,66,.16); }
 .photo img { width: 100%; height: 100%; object-fit: cover; }
-.about-round { z-index: 2; position: absolute; right: 0; bottom: 0; width: 46%; aspect-ratio: 1; object-fit: cover; border-radius: 50%; border: 8px solid var(--cream); box-shadow: 0 22px 46px rgba(14,26,66,.22); }
+.about-round { z-index: 2; position: absolute; right: 0; bottom: 0; width: 46%; aspect-ratio: 1; object-fit: cover; object-position: 62% 40%; border-radius: 50%; border: 8px solid var(--cream); box-shadow: 0 22px 46px rgba(14,26,66,.22); }
 .seal { z-index: 3; position: absolute; left: -26px; bottom: 90px; width: 124px; height: 124px; border-radius: 50%; background: var(--gold); color: #fff; display: grid; place-items: center; box-shadow: 0 16px 34px rgba(217,157,33,.4); }
 .seal svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 22s linear infinite; }
 .seal text { font-size: 9.5px; font-weight: 600; fill: #fff; }
@@ -173,7 +173,7 @@ em { font-style: normal; color: var(--gold); position: relative; }
 .tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(14,26,66,0) 38%, rgba(14,26,66,.82) 100%); transition: background .4s; }
 .tile:hover img { transform: scale(1.08); }
 .tile:hover::after { background: linear-gradient(180deg, rgba(14,26,66,.1) 20%, rgba(14,26,66,.88) 100%); }
-.tile-no { position: absolute; top: 24px; left: 28px; font-size: 1.1rem; font-weight: 600; letter-spacing: .1em; padding: 6px 14px; border-radius: 30px; background: rgba(255,255,255,.18); backdrop-filter: blur(6px); }
+.tile-no { position: absolute; top: 24px; left: 28px; font-size: 1.1rem; font-weight: 600; letter-spacing: .1em; padding: 6px 14px; border-radius: 30px; background: rgba(14,26,66,.55); backdrop-filter: blur(6px); }
 .tile-body { position: absolute; left: 30px; right: 100px; bottom: 30px; }
 .tile h3 { font-size: clamp(1.4rem, 2.2vw, 1.85rem); font-weight: 600; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 10px; }
 .tile p { font-size: .98rem; color: #e6ebff; max-width: 420px; }
