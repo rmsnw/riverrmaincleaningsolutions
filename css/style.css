@@ -392,3 +392,38 @@ html.lenis, html.lenis body { height: auto; }
 
 /* anchors land below the sticky header */
 section[id], .tile[id] { scroll-margin-top: 100px; }
+
+@media (max-width: 960px) {
+  .hero { min-height: 700px; }
+  .slide { align-items: flex-end; }
+  .slide-text { padding-bottom: 100px; }
+  .slide::after { background: linear-gradient(180deg, rgba(14,26,66,0) 0%, rgba(14,26,66,.35) 30%, rgba(14,26,66,.88) 100%); }
+}
+
+/* ---------- Transparent header over the hero ---------- */
+.site-header { position: fixed; left: 0; right: 0; top: 0; background: linear-gradient(180deg, rgba(14,26,66,.55) 0%, rgba(14,26,66,0) 100%); box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; transition: background .3s, box-shadow .3s; }
+.site-header.scrolled { background: rgba(255,255,255,.97); box-shadow: 0 2px 18px rgba(14,26,66,.1); }
+.topbar { background: transparent; border-bottom: 1px solid rgba(255,255,255,.18); }
+.hero { height: 100vh; min-height: 640px; max-height: 920px; }
+.slide { padding-top: 120px; }
+.site-header:not(.scrolled) .logo img { filter: brightness(0) invert(1); }
+@media (min-width: 961px) {
+  .site-header:not(.scrolled) .nav-list > li > a { color: #fff; }
+  .site-header:not(.scrolled) .nav-list > li > a:hover { background: rgba(255,255,255,.16); }
+  .site-header:not(.scrolled) .nav-list > li > a.active { background: #fff; color: var(--navy); }
+}
+@media (max-width: 960px) {
+  .site-header { background: linear-gradient(180deg, rgba(14,26,66,.6) 0%, rgba(14,26,66,0) 100%); }
+  .site-header.scrolled { background: #fff; }
+  .hero { height: auto; min-height: 720px; max-height: none; }
+  .slide { padding-top: 0; }
+  .burger { background: rgba(14,26,66,.85); }
+}
+.site-header { background: linear-gradient(180deg, rgba(14,26,66,.72) 0%, rgba(14,26,66,.3) 60%, rgba(14,26,66,0) 100%); }
+.site-header.scrolled { background: rgba(255,255,255,.97); }
+@media (min-width: 961px) { .site-header:not(.scrolled) .nav-list > li > a { text-shadow: 0 1px 10px rgba(8,16,48,.55); } }
+
+/* less zoom on slider photos */
+.slide-bg { transform: scale(1); }
+.slide.is-active .slide-bg { transform: scale(1.03); }
+@media (min-width: 961px) { .hero { height: min(100vh, 52vw); min-height: 600px; max-height: 860px; } }
