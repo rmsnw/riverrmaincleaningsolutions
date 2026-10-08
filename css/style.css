@@ -357,6 +357,6 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-stopped { overflow: hidden; }
 
 /* Developer credit */
-.credit { padding: 0 0 22px; text-align: center; font-size: .86rem; color: #9aa7d0; }
+.credit { color: #c4cde9; }
 .credit a { color: var(--gold); font-weight: 600; transition: color .2s; }
 .credit a:hover { color: #fff; }
