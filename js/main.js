@@ -42,17 +42,14 @@
     });
   });
   // reset if the window grows to desktop width
-  window.addEventListener('resize', function () { if (window.innerWidth > 960) setMenu(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
   document.addEventListener('click', function (e) {
     if (nav.classList.contains('open') && !nav.contains(e.target) && !burger.contains(e.target)) setMenu(false);
   });
   document.querySelectorAll('.has-dropdown > a').forEach(function (link) {
     link.addEventListener('click', function (e) {
-      if (window.matchMedia('(max-width: 960px)').matches) {
-        e.preventDefault();
-        link.parentElement.classList.toggle('open');
-      }
+      e.preventDefault();
+      link.parentElement.classList.toggle('open');
     });
   });
 
