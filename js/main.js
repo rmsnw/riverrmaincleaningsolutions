@@ -56,95 +56,98 @@
     });
   });
 
-  /* ---------- Hero slider ---------- */
+  /* ---------- Hero slider (home page only) ---------- */
   var hero = document.getElementById('hero');
-  var slides = Array.prototype.slice.call(hero.querySelectorAll('.slide'));
-  var dotsWrap = document.getElementById('dots');
-  var bar = document.getElementById('progress');
-  var DELAY = 6500;
-  var current = 0, timer = null, started = 0, remaining = DELAY, paused = false;
+  if (hero) {
+    var slides = Array.prototype.slice.call(hero.querySelectorAll('.slide'));
+    var dotsWrap = document.getElementById('dots');
+    var bar = document.getElementById('progress');
+    var DELAY = 6500;
+    var current = 0, timer = null, started = 0, remaining = DELAY, paused = false;
 
-  var dots = slides.map(function (_, i) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.setAttribute('role', 'tab');
-    b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-    b.addEventListener('click', function () { go(i); });
-    dotsWrap.appendChild(b);
-    return b;
-  });
-
-  var countEl = document.getElementById('count');
-  function render() {
-    if (countEl) countEl.textContent = '0' + (current + 1);
-    slides.forEach(function (s, i) { s.classList.toggle('is-active', i === current); });
-    dots.forEach(function (d, i) {
-      d.classList.toggle('is-active', i === current);
-      d.setAttribute('aria-selected', String(i === current));
+    var dots = slides.map(function (_, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      b.addEventListener('click', function () { go(i); });
+      dotsWrap.appendChild(b);
+      return b;
     });
-  }
 
-  function runProgress(ms) {
-    bar.style.transition = 'none';
-    bar.style.width = ((DELAY - ms) / DELAY * 100) + '%';
-    void bar.offsetWidth; // restart transition
-    bar.style.transition = 'width ' + ms + 'ms linear';
-    bar.style.width = '100%';
-  }
+    var countEl = document.getElementById('count');
+    function render() {
+      if (countEl) countEl.textContent = '0' + (current + 1);
+      slides.forEach(function (s, i) { s.classList.toggle('is-active', i === current); });
+      dots.forEach(function (d, i) {
+        d.classList.toggle('is-active', i === current);
+        d.setAttribute('aria-selected', String(i === current));
+      });
+    }
 
-  function schedule(ms) {
-    clearTimeout(timer);
-    remaining = ms;
-    started = Date.now();
-    runProgress(ms);
-    timer = setTimeout(function () { go(current + 1); }, ms);
-  }
+    function runProgress(ms) {
+      bar.style.transition = 'none';
+      bar.style.width = ((DELAY - ms) / DELAY * 100) + '%';
+      void bar.offsetWidth; // restart transition
+      bar.style.transition = 'width ' + ms + 'ms linear';
+      bar.style.width = '100%';
+    }
 
-  function go(i) {
-    current = (i + slides.length) % slides.length;
+    function schedule(ms) {
+      clearTimeout(timer);
+      remaining = ms;
+      started = Date.now();
+      runProgress(ms);
+      timer = setTimeout(function () { go(current + 1); }, ms);
+    }
+
+    function go(i) {
+      current = (i + slides.length) % slides.length;
+      render();
+      if (!paused) schedule(DELAY);
+      else { remaining = DELAY; bar.style.transition = 'none'; bar.style.width = '0'; }
+    }
+
+    function pause() {
+      if (paused) return;
+      paused = true;
+      clearTimeout(timer);
+      remaining = Math.max(300, remaining - (Date.now() - started));
+      var w = getComputedStyle(bar).width;
+      bar.style.transition = 'none';
+      bar.style.width = w;
+    }
+    function resume() {
+      if (!paused) return;
+      paused = false;
+      schedule(remaining);
+    }
+
+    document.getElementById('prev').addEventListener('click', function () { go(current - 1); });
+    document.getElementById('next').addEventListener('click', function () { go(current + 1); });
+    hero.addEventListener('mouseenter', pause);
+    hero.addEventListener('mouseleave', resume);
+    hero.addEventListener('focusin', pause);
+    hero.addEventListener('focusout', resume);
+    document.addEventListener('visibilitychange', function () { document.hidden ? pause() : resume(); });
+
+    hero.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') go(current - 1);
+      if (e.key === 'ArrowRight') go(current + 1);
+    });
+
+    // Touch swipe
+    var sx = 0, sy = 0;
+    hero.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    hero.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? current + 1 : current - 1);
+    }, { passive: true });
+
     render();
-    if (!paused) schedule(DELAY);
-    else { remaining = DELAY; bar.style.transition = 'none'; bar.style.width = '0'; }
+    schedule(DELAY);
+
   }
-
-  function pause() {
-    if (paused) return;
-    paused = true;
-    clearTimeout(timer);
-    remaining = Math.max(300, remaining - (Date.now() - started));
-    var w = getComputedStyle(bar).width;
-    bar.style.transition = 'none';
-    bar.style.width = w;
-  }
-  function resume() {
-    if (!paused) return;
-    paused = false;
-    schedule(remaining);
-  }
-
-  document.getElementById('prev').addEventListener('click', function () { go(current - 1); });
-  document.getElementById('next').addEventListener('click', function () { go(current + 1); });
-  hero.addEventListener('mouseenter', pause);
-  hero.addEventListener('mouseleave', resume);
-  hero.addEventListener('focusin', pause);
-  hero.addEventListener('focusout', resume);
-  document.addEventListener('visibilitychange', function () { document.hidden ? pause() : resume(); });
-
-  hero.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft') go(current - 1);
-    if (e.key === 'ArrowRight') go(current + 1);
-  });
-
-  // Touch swipe
-  var sx = 0, sy = 0;
-  hero.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
-  hero.addEventListener('touchend', function (e) {
-    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? current + 1 : current - 1);
-  }, { passive: true });
-
-  render();
-  schedule(DELAY);
 
   /* ---------- Scroll reveal ---------- */
   var revealEls = document.querySelectorAll('.reveal');
@@ -167,28 +170,29 @@
     });
   });
 
-  /* ---------- Quote form (no backend yet: opens the visitor's email app) ---------- */
-  var form = document.getElementById('quoteForm');
-  var note = document.getElementById('formNote');
-  if (form) {
+  /* ---------- Enquiry / career forms (no backend: opens the visitor's email app) ---------- */
+  document.querySelectorAll('form.js-mail').forEach(function (form) {
+    var note = form.querySelector('.form-note');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var f = form.elements, ok = true;
-      ['name', 'phone', 'email', 'service'].forEach(function (k) {
-        var bad = !f[k].value.trim() || (k === 'email' && !/^\S+@\S+\.\S+$/.test(f[k].value));
-        f[k].classList.toggle('invalid', bad);
+      var ok = true, lines = [];
+      Array.prototype.forEach.call(form.elements, function (el) {
+        if (!el.name || el.type === 'submit') return;
+        var v = el.value.trim();
+        var bad = el.required && (!v || (el.type === 'email' && !/^\S+@\S+\.\S+$/.test(v)));
+        el.classList.toggle('invalid', bad);
         if (bad) ok = false;
+        if (v) lines.push(el.name.replace(/_/g, ' ').replace(/^./, function (c) { return c.toUpperCase(); }) + ': ' + v);
       });
       note.className = 'form-note';
       if (!ok) { note.textContent = 'Please complete the highlighted fields.'; note.classList.add('error'); return; }
-      var body = 'Name: ' + f.name.value + '\nPhone: ' + f.phone.value + '\nEmail: ' + f.email.value +
-                 '\nService: ' + f.service.value + '\n\n' + f.message.value;
-      window.location.href = 'mailto:test@riverrmaincleaningsolutions.co.uk?subject=' +
-        encodeURIComponent('Quote request: ' + f.service.value) + '&body=' + encodeURIComponent(body);
-      note.textContent = 'Thank you! Your email app should open to send your enquiry.';
+      var svc = form.elements.service ? form.elements.service.value : '';
+      var subject = form.getAttribute('data-subject') + (svc ? ': ' + svc : '');
+      window.location.href = 'mailto:' + form.getAttribute('data-to') + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(lines.join('\n'));
+      note.textContent = 'Thank you! Your email app should open so you can send your message.';
       note.classList.add('ok');
     });
-  }
+  });
 
   /* ---------- Footer year ---------- */
   var y = document.getElementById('year');
