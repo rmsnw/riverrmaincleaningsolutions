@@ -705,3 +705,15 @@ html, body { max-width: 100%; overflow-x: clip; }
 .nav .dropdown a.dd-all { font-weight: 600; color: var(--navy); border-bottom: 1px solid rgba(22,37,90,.12); border-radius: 10px 10px 0 0; margin-bottom: 4px; }
 .nav .dropdown a.dd-all::before { background: var(--navy); }
 .nav .dropdown a.dd-all::after { content: '\2192'; margin-left: auto; color: var(--gold-dark); }
+
+/* ---------- Sticky WhatsApp button ---------- */
+.wa-float { position: fixed; right: 20px; bottom: 24px; z-index: 120; display: flex; align-items: center; gap: 0; border-radius: 60px; background: #25d366; color: #fff; box-shadow: 0 12px 30px rgba(14,26,66,.3); transition: transform .25s, box-shadow .25s; }
+.wa-float:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(14,26,66,.38); }
+.wa-icon { position: relative; display: grid; place-items: center; width: 60px; height: 60px; flex: none; }
+.wa-icon svg { width: 32px; height: 32px; fill: #fff; }
+.wa-icon::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 2px solid #25d366; animation: wa-pulse 2.2s ease-out infinite; }
+.wa-label { max-width: 0; overflow: hidden; white-space: nowrap; font-weight: 600; font-size: .95rem; transition: max-width .35s ease, padding .35s ease; }
+.wa-float:hover .wa-label, .wa-float:focus-visible .wa-label { max-width: 190px; padding-left: 22px; }
+@keyframes wa-pulse { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.6); opacity: 0; } }
+@media (max-width: 620px) { .wa-float { right: 14px; bottom: 16px; } .wa-icon { width: 56px; height: 56px; } }
+@media (prefers-reduced-motion: reduce) { .wa-icon::before { animation: none; } }
